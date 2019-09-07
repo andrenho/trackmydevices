@@ -22,14 +22,19 @@ resource "aws_security_group" "bastion" {
 }
 
 resource "aws_instance" "bastion" {
-  #depends_on = ["null_resource.create_keypair"]
+  depends_on = ["null_resource.create_keypair"]
 
   ami                         = "ami-0b69ea66ff7391e80"  # amazon linux
   instance_type               = "t2.micro"
   associate_public_ip_address = true
   key_name                    = "bastion"
-  security_groups             = ["${aws_security_group.bastion.id}"]
+  vpc_security_group_ids      = ["${aws_security_group.bastion.id}"]
   subnet_id                   = "${aws_subnet.public_a.id}"
+
+  user_data = <<EOF
+#!/bin/sh
+yum install postgresql -y
+EOF
   
   # TODO - user data
   # TODO - ephemeral block device

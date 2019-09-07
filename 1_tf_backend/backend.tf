@@ -4,6 +4,6 @@ resource "aws_s3_bucket" "b" {
   force_destroy = true
 
   tags = {
-    Creator = "tf"
+    Creator = "tf_backend"
   }
 }

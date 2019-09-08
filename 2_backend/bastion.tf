@@ -49,3 +49,11 @@ resource "aws_eip" "bastion_ip" {
   instance = "${aws_instance.bastion.id}"
   vpc      = true
 }
+
+resource "aws_route53_record" "bastion" {
+  zone_id = "${data.aws_route53_zone.main.zone_id}"
+  name    = "bastion.tmd.gamesmith.co.uk."
+  type    = "A"
+  ttl     = "300"
+  records = ["${aws_eip.bastion_ip.public_ip}"]
+}

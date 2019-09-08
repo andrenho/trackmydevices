@@ -21,6 +21,34 @@ resource "aws_security_group" "bastion" {
   }
 }
 
+resource "aws_iam_role" "ec2_read_ssm" {
+  name = "BastionSSM"
+  assume_role_policy = <<EOF
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Action": "sts:AssumeRole",
+      "Principal": {
+        "Service": "ec2.amazonaws.com"
+      },
+      "Effect": "Allow",
+      "Sid": ""
+    }
+  ]
+}
+EOF
+}
+
+resource "aws_iam_role_policy_attachment" "ec2_read_ssm" {
+  role       = "${aws_iam_role.ec2_read_ssm.name}"
+  policy_arn = "arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore"
+}
+
+resource "aws_iam_instance_profile" "ec2_read_ssm" {
+  role = "${aws_iam_role.ec2_read_ssm.name}"
+}
+
 resource "aws_instance" "bastion" {
   depends_on = ["null_resource.create_keypair"]
 
@@ -30,15 +58,10 @@ resource "aws_instance" "bastion" {
   key_name                    = "bastion"
   vpc_security_group_ids      = ["${aws_security_group.bastion.id}"]
   subnet_id                   = "${aws_subnet.public_a.id}"
+  iam_instance_profile        = "${aws_iam_instance_profile.ec2_read_ssm.name}"
 
-  user_data = <<EOF
-#!/bin/sh
-yum install postgresql -y
-EOF
+  user_data = "${file("user_data.sh")}"
   
-  # TODO - user data
-  # TODO - ephemeral block device
-
   tags = {
     Name    = "bastion"
     Creator = "backend"

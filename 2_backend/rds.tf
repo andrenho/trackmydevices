@@ -20,8 +20,9 @@ resource "aws_security_group" "rds" {
   }
 }
 
-resource "random_password" "db_passowrd" {
-  length = 16
+resource "random_password" "db_password" {
+  length           = 16
+  special          = false
 }
 
 resource "aws_db_instance" "database" {

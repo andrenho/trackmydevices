@@ -20,6 +20,10 @@ resource "aws_security_group" "rds" {
   }
 }
 
+resource "random_password" "db_passowrd" {
+  length = 16
+}
+
 resource "aws_db_instance" "database" {
   allocated_storage    = "20"
   storage_type         = "gp2"
@@ -28,7 +32,7 @@ resource "aws_db_instance" "database" {
   instance_class       = "db.t2.micro"
   name                 = "tmd"
   username             = "tmd"
-  password             = "admin123" # TODO
+  password             = "${random_password.db_password.result}"
   db_subnet_group_name = "${aws_db_subnet_group.rds.name}"
   vpc_security_group_ids = ["${aws_security_group.rds.id}"]
   enabled_cloudwatch_logs_exports = ["postgresql", "upgrade"]
@@ -44,4 +48,15 @@ resource "aws_route53_record" "rds" {
   type    = "CNAME"
   ttl     = 300
   records = ["${aws_db_instance.database.address}"]
+}
+
+resource "aws_ssm_parameter" "db_password" {
+  name        = "db_password"
+  description = "RDS database password"
+  type        = "SecureString"
+  value       = "${random_password.db_password.result}"
+  tags = {
+    Name    = "db_password"
+    Creator = "backend"
+  }
 }

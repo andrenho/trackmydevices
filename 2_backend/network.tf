@@ -18,22 +18,12 @@ resource "aws_subnet" "public_a" {
   }
 }
 
-resource "aws_subnet" "private_a" {
+resource "aws_subnet" "public_b" {
   vpc_id            = "${aws_vpc.main.id}"
-  cidr_block        = "10.0.3.0/24"
-  availability_zone = "us-east-1a"
-  tags = {
-    Name    = "private_subnet_a"
-    Creator = "backend"
-  }
-}
-
-resource "aws_subnet" "private_b" {
-  vpc_id            = "${aws_vpc.main.id}"
-  cidr_block        = "10.0.5.0/24"
+  cidr_block        = "10.0.2.0/24"
   availability_zone = "us-east-1b"
   tags = {
-    Name    = "private_subnet_b"
+    Name    = "public_subnet_b"
     Creator = "backend"
   }
 }
@@ -58,7 +48,12 @@ resource "aws_route_table" "main_route_table" {
   }
 }
 
-resource "aws_route_table_association" "rt_assoc" {
+resource "aws_route_table_association" "rt_assoc_a" {
   subnet_id      = "${aws_subnet.public_a.id}"
+  route_table_id = "${aws_route_table.main_route_table.id}"
+}
+
+resource "aws_route_table_association" "rt_assoc_b" {
+  subnet_id      = "${aws_subnet.public_b.id}"
   route_table_id = "${aws_route_table.main_route_table.id}"
 }

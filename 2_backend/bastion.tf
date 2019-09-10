@@ -50,7 +50,7 @@ resource "aws_iam_instance_profile" "ec2_read_ssm" {
 }
 
 resource "aws_instance" "bastion" {
-  depends_on = ["null_resource.create_keypair"]
+  depends_on = ["null_resource.create_keypair", "aws_db_instance.database"]
 
   ami                         = "ami-0b69ea66ff7391e80"  # amazon linux
   instance_type               = "t2.micro"

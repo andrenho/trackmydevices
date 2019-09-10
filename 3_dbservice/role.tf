@@ -25,6 +25,11 @@ resource "aws_iam_role_policy" "db_lambda" {
 								"xray:PutTelemetryRecords"
 						],
 						"Resource": "*"
+				},
+				{
+						"Effect": "Allow",
+            "Action": "ssm:GetParameter",
+            "Resource": "arn:aws:ssm:*:*:parameter/*"
 				}
     ]
 }

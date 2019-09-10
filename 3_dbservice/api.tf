@@ -50,9 +50,14 @@ resource "aws_api_gateway_rest_api" "db_api" {
 EOF
 }
 
-resource "aws_lambda_permission" "db_lambda" {
-  action        = "lambda:InvokeFunction"
-  function_name = "${aws_lambda_function.database.function_name}"
-  principal     = "apigateway.amazonaws.com"
-  source_arn    = "${aws_api_gateway_rest_api.db_api.execution_arn}/*/*/*"
+resource "aws_api_gateway_deployment" "prod" {
+  depends_on  = ["aws_api_gateway_rest_api.db_api"]
+  rest_api_id = "${aws_api_gateway_rest_api.db_api.id}"
+  stage_name  = ""
+}
+
+resource "aws_api_gateway_stage" "prod" {
+  stage_name    = "prod"
+  rest_api_id   = "${aws_api_gateway_rest_api.db_api.id}"
+  deployment_id = "${aws_api_gateway_deployment.prod.id}"
 }

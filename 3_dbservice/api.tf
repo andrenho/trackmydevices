@@ -34,7 +34,7 @@ resource "aws_api_gateway_rest_api" "db_api" {
           }
         },
         "x-amazon-apigateway-integration": {
-          "uri": "${aws_lambda_function.database.invoke_arn}",
+          "uri": "${aws_lambda_alias.prod_alias.invoke_arn}",
           "responses": {
             "default": { "statusCode": "200" }
           },

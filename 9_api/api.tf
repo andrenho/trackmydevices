@@ -1,3 +1,6 @@
+data "aws_caller_identity" "current" {}
+data "aws_region" "current" {}
+
 resource "aws_api_gateway_rest_api" "db_api" {
   name = "database_api"
 
@@ -23,21 +26,8 @@ resource "aws_api_gateway_rest_api" "db_api" {
             "schema": { "type": "string" }
           }
         ],
-        "responses": {
-          "200": {
-            "description": "200 response",
-            "content": {
-              "application/json": {
-                "schema": { "$ref": "#/components/schemas/Empty" }
-              }
-            }
-          }
-        },
         "x-amazon-apigateway-integration": {
-          "uri": "${aws_lambda_alias.prod_alias.invoke_arn}",
-          "responses": {
-            "default": { "statusCode": "200" }
-          },
+          "uri": "arn:aws:apigateway:${data.aws_region.current.name}:lambda:path/2015-03-31/functions/arn:aws:lambda:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:function:${data.aws_lambda_function.database.function_name}:prod/invocations",
           "passthroughBehavior": "when_no_match",
           "httpMethod": "POST",
           "contentHandling": "CONVERT_TO_TEXT",

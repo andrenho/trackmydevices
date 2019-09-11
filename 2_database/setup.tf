@@ -6,7 +6,7 @@ provider "aws" {
 terraform {
   backend "s3" {
     bucket = "tmd-bucket"
-    key    = "state"
+    key    = "2_database/state"
     region = "us-east-1"
   }
 }

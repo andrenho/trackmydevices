@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-device_id = '49b8a296-3bc5-42db-ae00-6d97329e919b'
+devices_id = ['49b8a296-3bc5-42db-ae00-6d97329e919b', '35b8f3f4-eb8b-48ab-82af-3a4e51962017']
 points = [
       [ -47.213841676712036, -23.07773798697002 ],
       [ -47.21551537513732, -23.077728116720863 ],
@@ -21,17 +21,18 @@ points = [
 
 import boto3
 dynamodb = boto3.client('dynamodb')
-time = 0
-for p in points:
-    dynamodb.put_item(
-        TableName='track',
-        Item={
-            'device_id' : { 'S': device_id },
-            'event_datetime': { 'N': str(time) },
-            'longitude': { 'N': str(p[0]) },
-            'latitude': { 'N': str(p[1]) } 
-        }
-    )
-    time += 2
+for device_id in devices_id:
+    time = 0
+    for p in points:
+        dynamodb.put_item(
+            TableName='track',
+            Item={
+                'device_id' : { 'S': device_id },
+                'event_datetime': { 'N': str(time) },
+                'longitude': { 'N': str(p[0]) },
+                'latitude': { 'N': str(p[1]) } 
+            }
+        )
+        time += 2
 
 # vim: ts=4:sts=4:sw=4:expandtab

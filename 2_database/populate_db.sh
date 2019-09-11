@@ -13,7 +13,6 @@ CREATE TABLE tmd.tmd (
 );
 
 -- test insert
-INSERT INTO tmd.tmd (username, device, device_name) VALUES ('andre_nho', '49b8a296-3bc5-42db-ae
-00-6d97329e919b', 'My test device');
+INSERT INTO tmd.tmd (username, device, device_name) VALUES ('andre_nho', '49b8a296-3bc5-42db-ae00-6d97329e919b', 'My test device');
 
 EOF

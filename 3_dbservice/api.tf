@@ -61,3 +61,10 @@ resource "aws_api_gateway_stage" "prod" {
   rest_api_id   = "${aws_api_gateway_rest_api.db_api.id}"
   deployment_id = "${aws_api_gateway_deployment.prod.id}"
 }
+
+resource "aws_api_gateway_base_path_mapping" "test" {
+  base_path   = "v1"
+  api_id      = "${aws_api_gateway_rest_api.db_api.id}"
+  stage_name  = "prod"
+  domain_name = "${aws_api_gateway_domain_name.gamesmith.domain_name}"
+}

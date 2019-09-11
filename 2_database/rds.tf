@@ -33,6 +33,7 @@ resource "aws_db_instance" "database" {
   instance_class       = "db.t2.micro"
   name                 = "tmd"
   username             = "tmd"
+  publicly_accessible  = true
   password             = "${random_password.db_password.result}"
   db_subnet_group_name = "${aws_db_subnet_group.rds.name}"
   vpc_security_group_ids = ["${aws_security_group.rds.id}"]

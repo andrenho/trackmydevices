@@ -15,17 +15,17 @@
         "responses": { "200": { "description": "200 response" } },
         "x-amazon-apigateway-integration": {
           "credentials": "arn:aws:iam::308301740443:role/DynamoTrackQueryTemp",
-          "uri": "arn:aws:apigateway:us-east-1:dynamodb:action/Query",
+          "uri": "arn:aws:apigateway:${region}:dynamodb:action/Query",
+          "requestTemplates": {
+            "application/json": ${track_request_template}
+          },
           "responses": {
             "2\\d{2}": {
               "statusCode": "200",
               "responseTemplates": {
-                "application/json": "#set($root = $input.path('$'))\n[\n#foreach($item in $root.Items)\n    $item\n    #if($foreach.hasNext),#end\n#end\n]\n\n"
+                "application/json": ${track_response_template}
               }
             }
-          },
-          "requestTemplates": {
-            "application/json": "{\n    \"TableName\": \"track\",\n    \"KeyConditionExpression\": \"device_id = :v1\",\n    \"ExpressionAttributeValues\": {\n        \":v1\": { \"S\": \"$input.params('device_id')\" }\n    }\n}"
           },
           "passthroughBehavior": "when_no_templates",
           "httpMethod": "POST",
@@ -39,7 +39,7 @@
           { "name": "username", "in": "path", "required": true, "schema": { "type": "string" } }
         ],
         "x-amazon-apigateway-integration": {
-          "uri": "arn:aws:apigateway:${data.aws_region.current.name}:lambda:path/2015-03-31/functions/arn:aws:lambda:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:function:${data.aws_lambda_function.database.function_name}:prod/invocations",
+          "uri": "arn:aws:apigateway:${region}:lambda:path/2015-03-31/functions/arn:aws:lambda:${region}:${account}:function:${user_function_name}:prod/invocations",
           "passthroughBehavior": "when_no_match",
           "httpMethod": "POST",
           "contentHandling": "CONVERT_TO_TEXT",

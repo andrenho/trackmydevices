@@ -1,0 +1,7 @@
+{
+    "TableName": "track",
+    "KeyConditionExpression": "device_id = :v1",
+    "ExpressionAttributeValues": {
+        ":v1": { "S": "$input.params('device_id')" }
+    }
+}

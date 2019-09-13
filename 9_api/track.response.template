@@ -1,0 +1,12 @@
+#set($root = $input.path('$'))
+[
+#foreach($item in $root.Items)
+  {
+    "eventTime": $item.event_datetime.N,
+    "longitude": $item.longitude.N,
+    "latitude": $item.latitude.N
+  }#if($foreach.hasNext),
+#end
+#end
+
+]

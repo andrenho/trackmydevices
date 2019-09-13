@@ -12,6 +12,7 @@ resource "aws_api_gateway_rest_api" "api" {
     region                  = "${data.aws_region.current.name}"
     account                 = "${data.aws_caller_identity.current.account_id}"
     user_function_name      = "${data.aws_lambda_function.database.function_name}"
+    track_role              = "${data.aws_iam_role.table_track.arn}"
     track_request_template  = jsonencode(templatefile("track.request.template", {}))
     track_response_template = jsonencode(templatefile("track.response.template", {}))
   })

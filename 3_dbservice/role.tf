@@ -16,7 +16,7 @@ resource "aws_iam_role_policy" "db_lambda" {
                 "logs:CreateLogStream",
                 "logs:PutLogEvents"
             ],
-            "Resource": "arn:aws:logs:us-east-1:308301740443:log-group:/aws/lambda/database:*"
+            "Resource": "arn:aws:logs:*:*:log-group:/aws/lambda/database:*"
         },
 				{
 						"Effect": "Allow",

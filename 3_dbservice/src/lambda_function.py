@@ -22,6 +22,8 @@ def lambda_handler(event, lambda_context):
         conn.close()
 
     return {
+        'isBase64Encoded': False,
         'statusCode': 200,
+        'headers': {},
         'body': json.dumps(items)
     }

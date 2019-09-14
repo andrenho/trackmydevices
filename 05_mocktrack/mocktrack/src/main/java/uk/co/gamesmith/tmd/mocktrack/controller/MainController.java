@@ -7,6 +7,11 @@ import uk.co.gamesmith.tmd.mocktrack.entity.HelloEntity;
 
 @RestController
 public class MainController {
+    @GetMapping("/")
+    public ResponseEntity healthCheck() {
+        return ResponseEntity.ok().build();
+    }
+
     @GetMapping("/hello")
     public HelloEntity hello() {
         return new HelloEntity("world");

@@ -3,6 +3,7 @@
 if [ $# -eq 0 ]
   then
     echo "Usage: $0 VERSION_LABEL"
+    exit 1
 fi
 
 cd mocktrack

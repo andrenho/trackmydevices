@@ -12,4 +12,10 @@ resource "aws_elastic_beanstalk_environment" "mocktrail" {
     name      = "EnvironmentType"
     value     = "SingleInstance"
   }
+
+  setting {
+    namespace = "aws:elasticbeanstalk:environment"
+    name      = "ServiceRole"
+    value     = "${aws_iam_role.sqs_eb.id}"
+  }
 }
